@@ -148,6 +148,9 @@ namespace VRCChatBox
 
             //CharactersRemainingString = $"{144 - TextBox.Text.Length}/144";
 
+            //TODO: Send OSC Typing command
+
+
 
         } // end textChangedEventHandler
 

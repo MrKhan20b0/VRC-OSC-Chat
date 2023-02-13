@@ -12,7 +12,8 @@
         RenderOptions.BitmapScalingMode="HighQuality"
         ResizeMode="CanResizeWithGrip"
         MaxWidth="575"
-        MinWidth="575">
+        MinWidth="575"
+        Icon="./Resources/Icon.png">
 
     <Window.DataContext>
         <viewmodel:MainViewModel/>
