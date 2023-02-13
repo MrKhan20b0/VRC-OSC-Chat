@@ -30,6 +30,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <!-- TOP BAR -->
         <Border Grid.ColumnSpan="2"
                 Background="#252525"
                 MouseDown="Border_MouseDown">
@@ -80,6 +81,22 @@
             </Grid>
         </Border>
 
+        <!-- Splash -->
+        <Border x:Name="Splash" Grid.RowSpan="2" Background="#252525" Panel.ZIndex="1">
+            <Label x:Name="SplashLabel" Content="ع"
+               Grid.RowSpan="2"
+               FontSize="500"
+               FontFamily="Arial"
+               Foreground="Gray"
+               VerticalContentAlignment="Center"
+               HorizontalContentAlignment="Center"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Margin="0,0,0,250"
+               Background="#252525"
+               />
+        </Border>
+        
 
 
 
@@ -149,13 +166,13 @@
                             Margin="8"
                             Command="{Binding SendCommand}">
                         <Button.Resources>
-                            
-                            
+
+
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="8"/>
                             </Style>
                         </Button.Resources>
-                        
+
 
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
@@ -179,25 +196,25 @@
                                         <MultiTrigger.Conditions>
                                             <Condition Property="IsMouseOver" Value="True"/>
                                             <Condition Property="IsPressed" Value="False"/>
-                                        </MultiTrigger.Conditions> 
-                                        
+                                        </MultiTrigger.Conditions>
+
                                         <Setter Property="Background" Value="#353535"/>
                                     </MultiTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
                     </Button>
-                    
+
 
 
                 </Grid>
 
             </Border>
-                
 
-                
 
-      
+
+
+
 
 
 

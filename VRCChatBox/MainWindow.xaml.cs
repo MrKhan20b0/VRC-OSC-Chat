@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,12 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Color = System.Windows.Media.Color;
+using ColorConverter = System.Windows.Media.ColorConverter;
 
 namespace VRCChatBox
 {
@@ -54,6 +58,75 @@ namespace VRCChatBox
             //DataContext= this;
 
             ((INotifyCollectionChanged)OldMessagesListView.Items).CollectionChanged += ListView_CollectionChanged;
+
+            // TODO: make the splash label show a random Arabic letter upon each startup
+
+
+            char[] ArabicLetters = {
+                '\u0627', //Alef
+                '\u0628', //Ba
+                '\u062A', //Ta
+                '\u062B', //Tha
+                '\u062C', //Jeem
+                '\u062D', //Haa
+                '\u062E', //Kha
+
+                '\u062F', //Dal
+                '\u0630', //Dhal
+                '\u0631', //ra
+                '\u0632', //Zayn
+
+                '\u0633', //seen
+                '\u0634', //sheen
+                '\u0635', //Saud
+                '\u0636', //Daud
+
+                '\u0637', //T~a
+                '\u0638', //Z~a
+                '\u0639', //Ein
+                '\u063A', //Ghein
+
+                '\u0641', //Fa
+                '\u0642', //Qaf
+                '\u0643', //Kaf
+                '\u0644', //Lam
+
+                '\u0645', //Meem
+                '\u0646', //noon
+                '\u0647', //ha
+                '\u0648', //wow
+
+                '\u064A', //Ya
+                '\u0622', //Alif Maddah
+                '\u0629', //Ta marbuta
+                '\u0649', //Alif maqsurah
+            };
+
+            Random random = new Random();
+            int randomNumber = random.Next(0, ArabicLetters.Length);
+            SplashLabel.Content = ArabicLetters[randomNumber];
+
+            var sb = new Storyboard();
+            var da = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(0.5)));
+            da.BeginTime = TimeSpan.FromSeconds(1);
+            Storyboard.SetTargetProperty(da, new PropertyPath("Opacity"));
+            Storyboard.SetTarget(da, Splash);
+            sb.Children.Add(da);
+            sb.Completed += (s1, e1) =>
+            {
+                Panel.SetZIndex(Splash, -1);
+                
+                sb = new Storyboard();
+                da = new DoubleAnimation(0, 0.05, new Duration(TimeSpan.FromSeconds(1.5)));
+                //da.BeginTime = TimeSpan.FromSeconds(3);
+                Storyboard.SetTargetProperty(da, new PropertyPath("Opacity"));
+                Storyboard.SetTarget(da, Splash);
+                sb.Children.Add(da);
+                sb.Begin();
+            };
+            
+            
+            sb.Begin();
 
         }
 
