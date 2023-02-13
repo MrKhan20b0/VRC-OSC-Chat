@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <None Remove="Resources\Icon.ico" />
-    <None Remove="Resources\send.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,8 +24,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\Icon.ico" />
-    <Resource Include="Resources\send.png" />
-	  <Resource Include="Resources\Icon.png" />
+	<Resource Include="Resources\Icon.png" />
   </ItemGroup>
 
 </Project>
