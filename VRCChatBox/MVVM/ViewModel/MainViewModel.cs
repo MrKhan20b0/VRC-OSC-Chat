@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using VRCChatBox.MVVM.Model;
 
 namespace VRCChatBox.MVVM.ViewModel
@@ -20,6 +21,18 @@ namespace VRCChatBox.MVVM.ViewModel
 
         public RelayCommand CopyOldMessage { get; set; }
 
+
+        private string _charactersRemainingString;
+        public string CharactersRemainingString
+        {
+            get { return _charactersRemainingString;  }
+            set
+            {
+                _charactersRemainingString = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _message = string.Empty;
         public string Message
         {
@@ -28,6 +41,8 @@ namespace VRCChatBox.MVVM.ViewModel
             {
                 _message = value;
                 OnPropertyChanged();
+                CharactersRemainingString = $"{_message.Length}/144";
+                
             }
         }
 
@@ -43,6 +58,13 @@ namespace VRCChatBox.MVVM.ViewModel
 
             SendCommand = new RelayCommand(o =>
             {
+
+                if (string.IsNullOrEmpty(Message))
+                {
+                    return;
+                }
+
+
                 Messages.Add(new ChatItem
                 {
                     Message = Message,
@@ -55,6 +77,9 @@ namespace VRCChatBox.MVVM.ViewModel
                 // Reset message property
                 Message = "";
             });
+
+
+            Message= string.Empty;
 
             
         }

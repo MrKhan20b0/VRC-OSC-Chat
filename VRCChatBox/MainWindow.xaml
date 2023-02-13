@@ -10,7 +10,9 @@
         UseLayoutRounding="True"
         Background="#2F3136"
         RenderOptions.BitmapScalingMode="HighQuality"
-        ResizeMode="CanResizeWithGrip">
+        ResizeMode="CanResizeWithGrip"
+        MaxWidth="575"
+        MinWidth="575">
 
     <Window.DataContext>
         <viewmodel:MainViewModel/>
@@ -90,14 +92,23 @@
 
             <ListView Grid.Row="0"
                       ItemsSource="{Binding Messages}"
-                      x:Name="MessageList"
+                      x:Name="OldMessagesListView"
                       Background="Transparent"
                       BorderThickness="0"
-                      Margin="8,0,0,0"
+                      Margin="8,0,0,20"
                       ItemContainerStyle="{StaticResource ChatItem}"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      >
 
             </ListView>
+
+            <Label Grid.Row="0"
+                   Content="{Binding CharactersRemainingString, UpdateSourceTrigger=PropertyChanged}"
+                   Foreground="Gray"
+                   FontWeight="Bold"
+                   VerticalAlignment="Bottom"
+                   Margin="10, 0, 10, -10"
+                   />
 
 
 
@@ -115,13 +126,15 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0"
+                    <TextBox x:Name="TextBox"
+                             Grid.Column="0"
                              Height="100"
                             
                                 
                              Style="{StaticResource MessageBox}"
 
-                             Grid.ColumnSpan="1"/>
+                             Grid.ColumnSpan="1"
+                             TextChanged="TextChangedhandler"/>
 
 
                     <Button Grid.Column="1"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -21,18 +22,20 @@ namespace VRCChatBox
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string message = string.Empty;
 
-        public string CurrentMessage
+
+
+        private string _charactersRemainingString;
+        public string CharactersRemainingString
         {
             get
             {
-                return message;
+                return _charactersRemainingString;
             }
             set
             {
-                message = value;
-                OnPropertyChanged(nameof(CurrentMessage));
+                _charactersRemainingString = value;
+                OnPropertyChanged(nameof(_charactersRemainingString));
             }
         }
 
@@ -49,14 +52,18 @@ namespace VRCChatBox
 
             // Link pathways from MainWindow.xaml to this object
             //DataContext= this;
+
+            ((INotifyCollectionChanged)OldMessagesListView.Items).CollectionChanged += ListView_CollectionChanged;
+
         }
 
 
-        /*private void KeyDownHandler(object sender, KeyEventArgs e)
+        private void ListView_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                SendMessageHandler(null, null);
+                // scroll the new item into view   
+                OldMessagesListView.ScrollIntoView(e.NewItems[0]);
             }
         }
 
@@ -64,25 +71,14 @@ namespace VRCChatBox
         {
             // Omitted Code: Insert code that does something whenever
             // the text changes...
-            System.Diagnostics.Debug.WriteLine("Len: "+message.Length);
+            System.Diagnostics.Debug.WriteLine("Len: " + TextBox.Text.Length);
 
-            if (message.Length >= 144)
-            {
-                System.Diagnostics.Debug.WriteLine("Setting to RED");
-                TextBox.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF2463AE");
-            }
-            else
-            {
-                TextBox.Foreground = Brushes.AntiqueWhite;
-            }
+            //CharactersRemainingString = $"{144 - TextBox.Text.Length}/144";
+
+
         } // end textChangedEventHandler
-    
 
-        private void SendMessageHandler(object? sender, RoutedEventArgs? e)
-        {
-            System.Diagnostics.Debug.WriteLine("Current Text:" + message);
-            TextBox.Text= string.Empty;
-        }*/
+
 
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
