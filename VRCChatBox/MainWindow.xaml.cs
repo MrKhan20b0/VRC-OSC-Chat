@@ -1,9 +1,15 @@
-﻿using System;
+﻿using CoreOSC;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -128,6 +134,71 @@ namespace VRCChatBox
             
             sb.Begin();
 
+            System.Diagnostics.Debug.WriteLine("1");
+
+
+
+            
+        }
+
+        private void Update()
+        {
+            var currentPath = System.IO.Directory.GetCurrentDirectory();
+            System.Diagnostics.Debug.WriteLine(currentPath);
+
+            // TODO: This has to be tested once we make it public
+
+            /*Task.Run(() =>
+            {
+                SaveFile("https://github.com/MrKhan20b0/VRC-OSC-Chat/releases/latest/download/v0.1.zip", "C:\\Users\\Adam\\Documents\\PJR9K\\VRC-OSC-Chat\\VRCChatBox\\bin\\Debug\\v0.1.zip");
+            }).Wait();*/
+
+            ZipFile.ExtractToDirectory("../v0.1.zip", currentPath);
+            RestartApplication();
+        }
+
+        private async Task SaveFile(string fileUrl, string pathToSave)
+        {
+            // See https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient
+            // for why, in the real world, you want to use a shared instance of HttpClient
+            // rather than creating a new one for each request
+
+
+            /* var httpClient = new HttpClient();
+
+             var httpResult = await httpClient.GetAsync(fileUrl);
+             using var resultStream = await httpResult.Content.ReadAsStreamAsync();
+             using var fileStream = File.Create(pathToSave);
+             resultStream.CopyTo(fileStream);
+
+             fileStream.Close();
+             resultStream.Dispose();
+             httpClient.Dispose();
+
+             System.Diagnostics.Debug.WriteLine("1");*/
+
+            
+            byte[] buffer = await DownloadFile(fileUrl);
+
+            File.WriteAllBytes(pathToSave, buffer);
+
+        }
+
+        public static async Task<byte[]> DownloadFile(string url)
+        {
+            using (var client = new HttpClient())
+            {
+
+                using (var result = await client.GetAsync(url))
+                {
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return await result.Content.ReadAsByteArrayAsync();
+                    }
+
+                }
+            }
+            return null;
         }
 
 
@@ -138,6 +209,21 @@ namespace VRCChatBox
                 // scroll the new item into view   
                 OldMessagesListView.ScrollIntoView(e.NewItems[0]);
             }
+        }
+
+        private static void RestartApplication()
+        {
+            string? currentExecutablePath = Process.GetCurrentProcess()?.MainModule?.FileName;
+            if (string.IsNullOrEmpty(currentExecutablePath))
+            {
+                System.Diagnostics.Debug.WriteLine("Failed To Restart: Could Not Find Main Module's File Name");
+            } 
+            else
+            {
+                Process.Start(currentExecutablePath);
+                Application.Current.Shutdown();
+            }
+            
         }
 
         private void TextChangedhandler(object sender, TextChangedEventArgs args)
@@ -152,6 +238,8 @@ namespace VRCChatBox
 
 
 
+
+            Update();
         } // end textChangedEventHandler
 
 
