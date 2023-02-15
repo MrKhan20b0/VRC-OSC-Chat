@@ -22,6 +22,9 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}},
                                                                         Path=DataContext.CopyOldMessage}"
                                           CommandParameter="{Binding Message}"/>
+                            <MouseBinding Gesture="RightClick" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}},
+                                                                        Path=DataContext.AppendOldMessage}"
+                                          CommandParameter="{Binding Message}"/>
                         </Border.InputBindings>
 
                         <Grid Margin="0, 3, 0, 3">

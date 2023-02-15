@@ -24,6 +24,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
+using Path = System.IO.Path;
 
 namespace VRCChatBox
 {
@@ -141,20 +142,25 @@ namespace VRCChatBox
             
         }
 
-        private void Update()
+
+/*        private void Update()
         {
             var currentPath = System.IO.Directory.GetCurrentDirectory();
             System.Diagnostics.Debug.WriteLine(currentPath);
 
             // TODO: This has to be tested once we make it public
 
-            /*Task.Run(() =>
+            *//*Task.Run(() =>
             {
                 SaveFile("https://github.com/MrKhan20b0/VRC-OSC-Chat/releases/latest/download/v0.1.zip", "C:\\Users\\Adam\\Documents\\PJR9K\\VRC-OSC-Chat\\VRCChatBox\\bin\\Debug\\v0.1.zip");
-            }).Wait();*/
+            }).Wait();*//*
 
-            ZipFile.ExtractToDirectory("../v0.1.zip", currentPath);
+            Directory.CreateDirectory(currentPath);
+            ZipFile.ExtractToDirectory("../v0.1.zip", currentPath+"new", true);
             RestartApplication();
+
+
+
         }
 
         private async Task SaveFile(string fileUrl, string pathToSave)
@@ -164,7 +170,7 @@ namespace VRCChatBox
             // rather than creating a new one for each request
 
 
-            /* var httpClient = new HttpClient();
+            *//* var httpClient = new HttpClient();
 
              var httpResult = await httpClient.GetAsync(fileUrl);
              using var resultStream = await httpResult.Content.ReadAsStreamAsync();
@@ -175,7 +181,7 @@ namespace VRCChatBox
              resultStream.Dispose();
              httpClient.Dispose();
 
-             System.Diagnostics.Debug.WriteLine("1");*/
+             System.Diagnostics.Debug.WriteLine("1");*//*
 
             
             byte[] buffer = await DownloadFile(fileUrl);
@@ -201,6 +207,21 @@ namespace VRCChatBox
             return null;
         }
 
+        private static void RestartApplication()
+        {
+            string? currentExecutablePath = Process.GetCurrentProcess()?.MainModule?.FileName;
+            if (string.IsNullOrEmpty(currentExecutablePath))
+            {
+                System.Diagnostics.Debug.WriteLine("Failed To Restart: Could Not Find Main Module's File Name");
+            }
+            else
+            {
+                Process.Start(currentExecutablePath);
+                Application.Current.Shutdown();
+            }
+
+        }*/
+
 
         private void ListView_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -211,20 +232,7 @@ namespace VRCChatBox
             }
         }
 
-        private static void RestartApplication()
-        {
-            string? currentExecutablePath = Process.GetCurrentProcess()?.MainModule?.FileName;
-            if (string.IsNullOrEmpty(currentExecutablePath))
-            {
-                System.Diagnostics.Debug.WriteLine("Failed To Restart: Could Not Find Main Module's File Name");
-            } 
-            else
-            {
-                Process.Start(currentExecutablePath);
-                Application.Current.Shutdown();
-            }
-            
-        }
+        
 
         private void TextChangedhandler(object sender, TextChangedEventArgs args)
         {
@@ -239,8 +247,7 @@ namespace VRCChatBox
 
 
 
-            Update();
-        } // end textChangedEventHandler
+        } 
 
 
 

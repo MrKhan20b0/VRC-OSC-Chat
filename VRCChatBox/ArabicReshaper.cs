@@ -211,7 +211,7 @@ namespace VRCOSC
                 }
                 else
                 {
-                    shapedString.Append(" ");
+                    shapedString.Append(initString[i]);
                 }
 
             }
@@ -226,6 +226,10 @@ namespace VRCOSC
                         processLetterInfo(initString[initString.Length - 1], 3, shapedString);
                     else
                         processLetterInfo(initString[initString.Length - 1], 0, shapedString);
+                }
+                else
+                {
+                    shapedString.Append(initString[initString.Length - 1]);
                 }
             }
                 
