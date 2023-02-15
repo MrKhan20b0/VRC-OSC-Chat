@@ -1,8 +1,7 @@
 {
   "profiles": {
     "VRCChatBox": {
-      "commandName": "Project",
-      "commandLineArgs": "updated"
+      "commandName": "Project"
     }
   }
 }

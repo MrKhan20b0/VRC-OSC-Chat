@@ -117,6 +117,7 @@ namespace VRCChatBox
             };
 
             string[] args = Environment.GetCommandLineArgs();
+            bool finishedUpdate = false;
 
             Random random = new Random();
             int randomNumber = random.Next(0, ArabicLetters.Length);
@@ -132,7 +133,7 @@ namespace VRCChatBox
             {
                 Panel.SetZIndex(Splash, -1);
 
-                if (args[1] == "updated")
+                if (finishedUpdate)
                 {
                     SplashLabel.Content = ArabicLetters[randomNumber];
                     SplashUpdateCompleteMessage.Visibility = Visibility.Collapsed;
@@ -160,6 +161,7 @@ namespace VRCChatBox
             {
                 if (args[1] == "updated")
                 {
+                    finishedUpdate = true;
                     SplashLabel.Content = "◯";
                     SplashUpdateCompleteMessage.Visibility= Visibility.Visible;
                 }
@@ -216,6 +218,7 @@ namespace VRCChatBox
 
                 startInfo.Arguments = string.Join(' ', args);
                 startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardInput= true;
                 startInfo.CreateNoWindow = true;
 
                 updaterProcess.StartInfo = startInfo;
@@ -229,18 +232,28 @@ namespace VRCChatBox
 
         public void ShowUpdatePrompt(object sender, DataReceivedEventArgs args)
         {
-            this.Dispatcher.Invoke(() =>
+            try
             {
-                if (args.Data == "needUpdate")
+                this.Dispatcher.Invoke(() =>
                 {
-                    updateAvailable = true;
-                    UpdatePrompt.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    CancelUpdate();
-                }
-            });
+                    if (args.Data == "needUpdate")
+                    {
+                        Panel.SetZIndex(TopBar, 3);
+                        updateAvailable = true;
+                        UpdatePrompt.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        CancelUpdate();
+                    }
+                });
+            } 
+            catch (TaskCanceledException e)
+            {
+                // Current known reason for this: User shut down program while updating
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+            }
+            
            
         }
 
@@ -249,6 +262,7 @@ namespace VRCChatBox
             // Updater process is waiting for parent process to die to do update
             if (updateAvailable)
             {
+                updaterProcess.StandardInput.WriteLine("update");
                 Environment.Exit(0);
             }
         }
@@ -258,8 +272,10 @@ namespace VRCChatBox
             // Updater process is waiting for parent process to die to do update
             if (updaterProcess != null)
             {
+                updaterProcess.StandardInput.WriteLine("cancel");
                 updaterProcess.Kill();
             }
+            Panel.SetZIndex(TopBar, 0);
             UpdatePrompt.Visibility = Visibility.Collapsed;
         }
 
@@ -299,6 +315,7 @@ namespace VRCChatBox
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
+            CancelUpdate();
             Application.Current.Shutdown();
         }
 
