@@ -37,6 +37,8 @@ namespace VRCChatBox
     {
         private const string VERSION = "0.0";
 
+        private bool updateAvailable = false;
+        private Process updaterProcess;
 
         private string _charactersRemainingString;
         public string CharactersRemainingString
@@ -63,7 +65,7 @@ namespace VRCChatBox
         {
             InitializeComponent();
 
-
+            CheckForUpdate();
 
 
             // Link pathways from MainWindow.xaml to this object
@@ -114,6 +116,8 @@ namespace VRCChatBox
                 '\u0649', //Alif maqsurah
             };
 
+            string[] args = Environment.GetCommandLineArgs();
+
             Random random = new Random();
             int randomNumber = random.Next(0, ArabicLetters.Length);
             SplashLabel.Content = ArabicLetters[randomNumber];
@@ -127,7 +131,13 @@ namespace VRCChatBox
             sb.Completed += (s1, e1) =>
             {
                 Panel.SetZIndex(Splash, -1);
-                
+
+                if (args[1] == "updated")
+                {
+                    SplashLabel.Content = ArabicLetters[randomNumber];
+                    SplashUpdateCompleteMessage.Visibility = Visibility.Collapsed;
+                }
+
                 sb = new Storyboard();
                 da = new DoubleAnimation(0, 0.05, new Duration(TimeSpan.FromSeconds(1.5)));
                 //da.BeginTime = TimeSpan.FromSeconds(3);
@@ -142,122 +152,23 @@ namespace VRCChatBox
 
             System.Diagnostics.Debug.WriteLine("1");
 
-
-
-            
-        }
-
-/*
-        private void Update()
-        {
             
 
-            // TODO: This has to be tested once we make it public
+            
 
-            *//*Task.Run(() =>
+            if (args != null && args.Length == 2)
             {
-                SaveFile("https://github.com/reactiveui/ReactiveUI/releases/latest/download", "C:\\Users\\Adam\\Documents\\PJR9K\\VRC-OSC-Chat\\VRCChatBox\\bin\\Debug\\v0.1.zip");
-            }).Wait();*//*
-
-
-            // TODO: remove this
-            var currentPath = System.IO.Directory.GetCurrentDirectory();
-            System.Diagnostics.Debug.WriteLine(currentPath);
-            Directory.CreateDirectory(currentPath);
-            ZipFile.ExtractToDirectory("../v0.1.zip", currentPath + SALT_DIRECTORY_EXT, true);
-            RestartApplicationNewVersion();
-
-        }
-
-        private async Task SaveFile(string fileUrl, string pathToSave)
-        {
-            // See https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclient
-            // for why, in the real world, you want to use a shared instance of HttpClient
-            // rather than creating a new one for each request
-
-
-            var httpClient = new HttpClient();
-
-            var httpResult = await httpClient.GetAsync(fileUrl);
-
-            System.Diagnostics.Debug.WriteLine(httpResult.RequestMessage.RequestUri);
-            string uriString = httpResult.RequestMessage.RequestUri.ToString();
-
-            float newVersion = float.Parse(uriString.Substring(uriString.Length - 7, 3), CultureInfo.InvariantCulture.NumberFormat);
-            System.Diagnostics.Debug.WriteLine(newVersion);
-
-
-
-
-
-            httpClient.Dispose();
-
-            System.Diagnostics.Debug.WriteLine("1");
-
-
-            byte[] buffer = await DownloadFile(fileUrl);
-
-            File.WriteAllBytes(pathToSave, buffer);
-
-
-            *//*var currentPath = System.IO.Directory.GetCurrentDirectory();
-            System.Diagnostics.Debug.WriteLine(currentPath);
-            Directory.CreateDirectory(currentPath);
-            ZipFile.ExtractToDirectory("../v0.1.zip", currentPath + SALT_DIRECTORY_EXT, true);
-            RestartApplicationNewVersion();*//*
-
-        }
-
-        public static async Task<byte[]> DownloadFile(string url)
-        {
-            using (var client = new HttpClient())
-            {
-
-                using (var result = await client.GetAsync(url))
+                if (args[1] == "updated")
                 {
-                    if (result.IsSuccessStatusCode)
-                    {
-                        return await result.Content.ReadAsByteArrayAsync();
-                    }
-
+                    SplashLabel.Content = "◯";
+                    SplashUpdateCompleteMessage.Visibility= Visibility.Visible;
                 }
             }
-            return null;
+
+            
+
         }
-
-        private static void RestartApplicationNewVersion()
-        {
-            string? currentExecutablePath = Process.GetCurrentProcess()?.MainModule?.FileName;
-
-            System.Diagnostics.Debug.WriteLine(currentExecutablePath);
-
-            if (string.IsNullOrEmpty(currentExecutablePath))
-            {
-                System.Diagnostics.Debug.WriteLine("Failed To Restart: Could Not Find Main Module's File Name");
-                return;
-            }
-
-            var splitPath = currentExecutablePath.Split("\\");
-
-            splitPath[splitPath.Length - 2] += SALT_DIRECTORY_EXT;
-
-            string newExcutablePath = string.Join("\\", splitPath);
-
-            System.Diagnostics.Debug.WriteLine(newExcutablePath);
-
-
-
-            if (!File.Exists(newExcutablePath))
-            {
-                System.Diagnostics.Debug.WriteLine("Failed To Restart: Could Not Find Main Module's File Name");
-            }
-            else
-            {
-                Process.Start(newExcutablePath);
-                Application.Current.Shutdown();
-            }
-
-        }*/
+        
 
 
         private void ListView_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -282,28 +193,74 @@ namespace VRCChatBox
             //TODO: Send OSC Typing command
 
 
-            CreateChildProcess();
+            
 
         }
 
-        private void CreateChildProcess()
+        private void CheckForUpdate()
         {
-            Process p = new Process();
-            var startInfo = new ProcessStartInfo("./auto-updater/auto-updater.exe");
-            startInfo.UseShellExecute = false;
-            string[] args = { VERSION, Process.GetCurrentProcess().Id.ToString(), "v0.1.zip", "vrc_osc_chat.exe"};
-            startInfo.Arguments = string.Join(' ', args);
-            startInfo.RedirectStandardOutput= true;
-            
-            p.StartInfo = startInfo;
-            p.OutputDataReceived += (sender, args) => System.Diagnostics.Debug.WriteLine("received output: {0}", args.Data);
-            p.Start();
-            p.BeginOutputReadLine();
+            if (File.Exists("./auto-updater/auto-updater.exe"))
+            {
+                updaterProcess = new Process();
+                var startInfo = new ProcessStartInfo("./auto-updater/auto-updater.exe");
+                startInfo.UseShellExecute = false;
+                string[] args = {
+                VERSION,
+                Process.GetCurrentProcess().Id.ToString(),
+                "VRCOSCCHAT.zip",
+                "VRCChatBox.exe",
+                "updated",
+                "needUpdate",
+                "https://github.com/MrKhan20b0/VRC-OSC-Chat/releases/latest/download"
+                };
+
+                startInfo.Arguments = string.Join(' ', args);
+                startInfo.RedirectStandardOutput = true;
+                startInfo.CreateNoWindow = true;
+
+                updaterProcess.StartInfo = startInfo;
+                updaterProcess.OutputDataReceived += ShowUpdatePrompt;
+                updaterProcess.Start();
+                updaterProcess.BeginOutputReadLine();
+            }
+           
+        }
 
 
-            Thread.Sleep(1000);
-            p.Kill();
-            //Environment.Exit(0) ;
+        public void ShowUpdatePrompt(object sender, DataReceivedEventArgs args)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                if (args.Data == "needUpdate")
+                {
+                    updateAvailable = true;
+                    UpdatePrompt.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    CancelUpdate();
+                }
+            });
+           
+        }
+
+        private void DoUpdate()
+        {
+            // Updater process is waiting for parent process to die to do update
+            if (updateAvailable)
+            {
+                Environment.Exit(0);
+            }
+        }
+
+        private void CancelUpdate()
+        {
+            // Updater process is waiting for parent process to die to do update
+            if (updaterProcess != null)
+            {
+                updaterProcess.Kill();
+            }
+            UpdatePrompt.Visibility = Visibility.Collapsed;
         }
 
 
@@ -315,6 +272,7 @@ namespace VRCChatBox
             {
                 DragMove();
             }
+
 
 
             // This will automatically scroll to bottom when clicing the border
@@ -342,6 +300,16 @@ namespace VRCChatBox
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void PromptButtonAccept_Click(object sender, RoutedEventArgs e)
+        {
+            DoUpdate();
+        }
+
+        private void PromptButtonDecline_Click(object sender, RoutedEventArgs e)
+        {
+            CancelUpdate();
         }
     }
 }

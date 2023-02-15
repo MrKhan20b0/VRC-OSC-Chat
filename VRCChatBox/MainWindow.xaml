@@ -82,9 +82,171 @@
             </Grid>
         </Border>
 
+        <!-- UPDATE PROMPT -->
+        <Border x:Name="UpdatePrompt" Grid.RowSpan="2" Background="#252525" Panel.ZIndex="1" Visibility="Collapsed">
+
+            <Grid Margin="0,20,0,0"
+                  Background="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+
+                <Label x:Name="UpdateLabel" Content="!"
+                       Grid.RowSpan="3"
+                       Grid.ColumnSpan="2"
+                       FontSize="500"
+                       FontFamily="Arial"
+                       Foreground="Gray"
+                       VerticalContentAlignment="Center"
+                       HorizontalContentAlignment="Center"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,250"
+                       Background="#252525"
+                       />
+
+                <TextBlock
+                           Grid.ColumnSpan="2"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           Foreground="LightGray"
+                           Text="An update is available. Would you like to update?" Margin="0,237,0,0" Grid.Row="1"/>
+
+                <TextBlock
+                           Grid.ColumnSpan="2"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           Foreground="LightGray"
+                           Text="تحديث متاح. هل ترغب في تحديث؟" Margin="0,265,0,0" Grid.Row="1"/>
+
+                <Button Grid.Column="0"
+                        Grid.Row="2"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Content="◯"
+                        Click="PromptButtonAccept_Click"
+                        FontSize="50"
+                        FontFamily="Arial"
+                        BorderThickness="0"
+                        FontWeight="Bold"
+
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Margin="50, 45, 50, 200"
+                            >
+                    <Button.Resources>
+
+
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="#252525"/>
+                            <Setter Property="Foreground" Value="DarkGray"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Foreground" Value="#252525"/>
+                                    <Setter Property="Background" Value="DarkGray"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsPressed" Value="False"/>
+                                    </MultiTrigger.Conditions>
+
+                                    <Setter Property="Background" Value="#353535"/>
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Grid.Column="1"
+                    Grid.Row="2"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Content="╳"
+                    Click="PromptButtonDecline_Click"
+                    FontSize="50"
+                    FontFamily="Arial"
+                    FontWeight="Bold"
+                    BorderThickness="0"
+
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Margin="50, 45, 50, 200"
+                        >
+                    <Button.Resources>
+
+
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="#252525"/>
+                            <Setter Property="Foreground" Value="DarkGray"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Foreground" Value="#252525"/>
+                                    <Setter Property="Background" Value="DarkGray"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsPressed" Value="False"/>
+                                    </MultiTrigger.Conditions>
+
+                                    <Setter Property="Background" Value="#353535"/>
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+
+
+            </Grid>
+
+        </Border>
+
         <!-- Splash -->
         <Border x:Name="Splash" Grid.RowSpan="2" Background="#252525" Panel.ZIndex="1">
-            <Label x:Name="SplashLabel" Content="ع"
+
+            <Grid>
+
+                <Label x:Name="SplashLabel" Content="ع"
                Grid.RowSpan="2"
                FontSize="500"
                FontFamily="Arial"
@@ -96,8 +258,40 @@
                Margin="0,0,0,250"
                Background="#252525"
                />
+
+                <Grid x:Name="SplashUpdateCompleteMessage" Visibility="Collapsed">
+                    <Label  Content="Done"
+                           Grid.RowSpan="2"
+                           FontSize="50"
+                           Foreground="Gray"
+                           Background="Transparent"
+                           VerticalContentAlignment="Center"
+                           HorizontalContentAlignment="Center"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,320"
+
+                           />
+                    <Label  Content="أنهى"
+                           Grid.RowSpan="2"
+                           FontSize="50"
+                           Foreground="Gray"
+                           Background="Transparent"
+                           VerticalContentAlignment="Center"
+                           HorizontalContentAlignment="Center"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,180"
+
+                           />
+                    
+                </Grid>
+
+
+            </Grid>
+            
         </Border>
-        
+
 
 
 
@@ -129,9 +323,9 @@
                    />
 
 
-            
-            
-           
+
+
+
             <Border Grid.Row="1"
                     CornerRadius="8"
                     Background="#3e4147"
