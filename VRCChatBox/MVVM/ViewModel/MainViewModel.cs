@@ -207,7 +207,8 @@ namespace VRCChatBox.MVVM.ViewModel
                 prevType = type;
             }
 
-
+            // TODO: We need to reverse the order of Arabic Holy shit this is a lot of work.
+            //       Making this compatible with arabic sucks
 
 
             // TODO: Sperate sections of english from Arabic
