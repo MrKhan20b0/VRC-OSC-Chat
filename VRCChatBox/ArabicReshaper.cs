@@ -35,6 +35,7 @@ namespace VRCOSC
                 ///////////////////////////////////////////////////////////////////////////
                 // letter   new List<char> { isolated, initial, middle, terminal }
                 { '\u0621', new List<char> { '\uFE80', '\0', '\0', '\0'} },
+
                 { '\u0622', new List<char> { '\u0622', '\0', '\0', '\uFE82'} },
                 { '\u0623', new List<char> { '\u0623', '\0', '\0', '\uFE84'} },
                 { '\u0624', new List<char> { '\u0624', '\0', '\0', '\uFE86'} },
@@ -202,6 +203,32 @@ namespace VRCOSC
                         {
                             if (letterInfo[1] == '\0' && letterInfo[2] == '\0')
                                 indexToLetterInfo = 3;
+                        }
+
+                        // If the next character does not have a final form, like hamza, we are final form
+                       
+                        char nextChar = initString[i + 1];
+                        if (!char.IsWhiteSpace(nextChar))
+                        {
+                            letters.TryGetValue(nextChar, out letterInfo);
+                            bool nextCharConnects = letterInfo[3] != '\0';
+
+                            if (!nextCharConnects)
+                            {
+                                letters.TryGetValue(initString[i], out letterInfo);
+
+                                // Next does not connect, but previous char does, we are final form
+                                if (previousConnected && letterInfo[3] != '\0')
+                                {
+                                    indexToLetterInfo = 3;
+                                }
+                                // Otherwise we are isolated.
+                                else
+                                {
+                                    indexToLetterInfo = 0;
+                                }
+                            }
+                            
                         }
                     }
 
