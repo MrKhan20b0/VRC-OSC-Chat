@@ -19,7 +19,7 @@ Using this software, Arabic messages are displayed properly: Words are written r
 - An optional **auto-updater** version. This verion will automatically check for updates and prompt you, if you would like to install the latest release.
 
 
-#####**NOTE**: This does not translate English to Arabic, or vice versa. 
+###### **NOTE**: This does not translate English to Arabic, or vice versa. 
 ---
 ## Download & Install
 1. Goto to [latest release](https://github.com/MrKhan20b0/VRC-OSC-Chat/releases/latest)
