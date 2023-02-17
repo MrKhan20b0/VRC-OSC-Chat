@@ -3,13 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
 using VRCChatBox.MVVM.Model;
 using VRCOSC;
 
@@ -66,8 +69,13 @@ namespace VRCChatBox.MVVM.ViewModel
 
         private bool lastTypingBoolSent = true;
 
+        private TextBlock _dummyTextBlock = new TextBlock();
+
+        private const int VRCHAT_MAX_TEXT_LENGTH = 144;
+
         public MainViewModel()
         {
+            _dummyTextBlock.FontFamily = new FontFamily("Arial");
             Messages = new ObservableCollection<ChatItem>();
 
 
@@ -83,6 +91,11 @@ namespace VRCChatBox.MVVM.ViewModel
             {
                 System.Diagnostics.Debug.WriteLine("OldMessage" + o);
                 Message += (string)o;
+
+                if (Message.Length >= VRCHAT_MAX_TEXT_LENGTH)
+                {
+                    Message = Message.Substring(0, VRCHAT_MAX_TEXT_LENGTH);
+                }
             });
 
             SendCommand = new RelayCommand(o =>
@@ -114,6 +127,15 @@ namespace VRCChatBox.MVVM.ViewModel
 
 
         }
+
+ /*       private int MessageActualLength()
+        {
+            // For every space, we add the "Arabic Character" (U + 061c) Character.
+            // This must be done, or else text that shhould be on a new line, wont be in VRChat.
+            // IDK why, but adding u061c fixes it.
+            // Therefore, every space takes up 2 spaces instead of 1
+            return Message.Length + Message.Count(o => 0 == ' ');
+        }*/
 
         public void SendTyping(bool IsTyping)
         {
@@ -210,12 +232,39 @@ namespace VRCChatBox.MVVM.ViewModel
             // TODO: We need to reverse the order of Arabic Holy shit this is a lot of work.
             //       Making this compatible with arabic sucks
 
-
-            // TODO: Sperate sections of english from Arabic
+            // TODO: Not a fix, but we could spererate the sentence by terminal punctuation.
+            //       We then reverse sentence ordering to fix bottom-to-top issue.
+           
             //currentText = ArabicReshaper.Reshape(currentText);
-            var message = new CoreOSC.OscMessage("/chatbox/input", processedText.ToString().Replace(" ", "\u061c \u061c"), true);
+            var message = new CoreOSC.OscMessage("/chatbox/input", processedText.ToString().Replace(" ", " \u061c"), true);
+            
+
+            // This uses the invisible times unicode char. It makes the message length accurate, but the spaces are large in VRChat
+            //var message = new CoreOSC.OscMessage("/chatbox/input", processedText.ToString().Replace(" ", "\u2062"), true);
+
+
+            System.Diagnostics.Debug.WriteLine("Processed Text Length: " + processedText.Length + "   Size: " + MeasureString(processedText.ToString()));
+            
             var sender = new CoreOSC.UDPSender(_vrcAddress, _vrcPort);
             sender.Send(message);
         }
+
+
+        
+        private Size MeasureString(string candidate)
+        {
+            var formattedText = new FormattedText(
+                candidate,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface(this._dummyTextBlock.FontFamily, this._dummyTextBlock.FontStyle, this._dummyTextBlock.FontWeight, this._dummyTextBlock.FontStretch),
+                this._dummyTextBlock.FontSize,
+                Brushes.Black,
+                new NumberSubstitution(),
+                VisualTreeHelper.GetDpi(this._dummyTextBlock).PixelsPerDip);
+
+            return new Size(formattedText.Width, formattedText.Height);
+        }
+
     }
 }

@@ -39,8 +39,9 @@ This project is still a *work-in-progress*, so having the auto updater saves you
 ---
 ## Known Issues
 
-- Long sentences in Arabic that need more than one line in VRChat message bubbles have to be read from the bottom-up. They can still be read right-to-left, though. A solution is in the works.
+- Long sentences in Arabic that need more than one line in VRChat message bubbles have to be read from the bottom-up. They can still be read right-to-left, though. I am searching for a solution.
 
+- Unfortunatly a space takes up 2 character slots out of the 144 availble per message in VRCha. Arabic messages that require multiple lines to be displayed in VRChat will be rendered on top of eachother (Completely unreadable), unless the unicode "Arabic Character (U+061C)" is either just before or after the space. This additional character is not reflected in the character limit, so you may see your message be truncated in VRChat if the message is long with many spaces. I'm not sure if this can be solved.
 ---
 ## Contribution
 Feel free to fork this repo and make any improvements you would like.

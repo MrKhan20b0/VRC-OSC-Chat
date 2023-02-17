@@ -205,8 +205,7 @@ namespace VRCOSC
                                 indexToLetterInfo = 3;
                         }
 
-                        // If the next character does not have a final form, like hamza, we are final form
-                       
+                        // If the next character does not have a final form, like hamza, we are final form or isolated.
                         char nextChar = initString[i + 1];
                         if (!char.IsWhiteSpace(nextChar))
                         {

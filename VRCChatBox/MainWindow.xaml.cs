@@ -35,7 +35,7 @@ namespace VRCChatBox
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string VERSION = "0.0";
+        private const string VERSION = "0.01";
 
         private bool updateAvailable = false;
         private Process updaterProcess;
