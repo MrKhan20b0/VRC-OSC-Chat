@@ -1,7 +1,7 @@
-# VRC-OSC-Chat (WIP)
+# VRC-OSC-Chat
 
-Allows you to send both **English** and **Arabic** Messages in VRChat. 
-As of now, Arabic messeges sent by the in-game keyboard are backwards, and the the letters are not connected.
+Allows you to send both **English** and **Arabic** Messages in VRChat using OSC. 
+As of now, Arabic messeges sent by the in-game keyboard are backwards, and the letters are not connected.
 
 Using this software, Arabic messages are displayed properly: Words are written right to left, and letters are connected properly.
 
