@@ -15,7 +15,15 @@
                                     <Trigger Property="Border.IsMouseOver" Value="True">
                                         <Setter Property="Border.Background" Value="#3e4147" />
                                     </Trigger>
+                                    
+                                    
+                                    <DataTrigger Binding="{Binding FailedToSend}" Value="True">
+                                        <Setter Property="Border.Background" Value="#880000" />
+                                    </DataTrigger>
+
                                 </Style.Triggers>
+
+                                
                             </Style>
                         </Border.Style>
                         <Border.InputBindings>

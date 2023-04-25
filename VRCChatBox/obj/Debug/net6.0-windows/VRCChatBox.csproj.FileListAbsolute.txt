@@ -28,7 +28,10 @@ C:\Users\Adam\Documents\PJR9K\VRCChatBox\VRCChatBox\obj\Debug\net6.0-windows\The
 C:\Users\Adam\Documents\PJR9K\VRCChatBox\VRCChatBox\obj\Debug\net6.0-windows\Themes\ChatButton.baml
 C:\Users\Adam\Documents\PJR9K\VRCChatBox\VRCChatBox\obj\Debug\net6.0-windows\Themes\ChatItem.baml
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\VRCChatBox.exe
+C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\VRCChatBox.deps.json
+C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\VRCChatBox.runtimeconfig.json
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\VRCChatBox.dll
+C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\VRCChatBox.pdb
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\CoreOSC.dll
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.csproj.AssemblyReference.cache
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\Themes\ChatButton.baml
@@ -48,12 +51,9 @@ C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\V
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.AssemblyInfoInputs.cache
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.AssemblyInfo.cs
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.csproj.CoreCompileInputs.cache
+C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.csproj.CopyComplete
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.dll
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\refint\VRCChatBox.dll
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.pdb
-C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\VRCChatBox.deps.json
-C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\VRCChatBox.runtimeconfig.json
-C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\bin\Debug\net6.0-windows\VRCChatBox.pdb
-C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.csproj.CopyComplete
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\VRCChatBox.genruntimeconfig.cache
 C:\Users\Adam\Documents\PJR9K\VRC-OSC-Chat\VRCChatBox\obj\Debug\net6.0-windows\ref\VRCChatBox.dll

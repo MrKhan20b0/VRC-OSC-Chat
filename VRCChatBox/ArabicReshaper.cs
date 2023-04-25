@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -23,10 +24,14 @@ namespace VRCOSC
         // question mark, 
         private static readonly string punctuation = "\u061F";
 
+        private static readonly string harakatRegex = "[\u064B-\u065f]";
+
 
         private static readonly Dictionary<char, List<char>> letters
         = new Dictionary<char, List<char>>
-            {   
+            {
+                // Harakaat
+                { '\u064B', new List<char> { '\u064B', '\0', '\0', '\0' } },
 
                 // Lam followed by Alef          { isolated, initial, middle, terminal }
                 { '\uFEFB', new List<char> { '\uFEFB', '\0', '\0', '\uFEFC'} },
@@ -143,6 +148,9 @@ namespace VRCOSC
 
         private static string ReshapeLetters(string initString)
         {
+            if (initString.Length <= 1)
+                return initString;
+
             StringBuilder shapedString = new();
 
             // initial char
@@ -274,6 +282,34 @@ namespace VRCOSC
             return initString;
         }
 
+        private static string HarvestHarakat(string s, SortedDictionary<int, char> harakat)
+        {
+            MatchCollection mc = Regex.Matches(s, harakatRegex);
+
+            // Harvest harakats from string 
+            int nHarakatRemoved = 0;
+            foreach (Match m in mc)
+            {
+                System.Diagnostics.Debug.WriteLine(m.Index);
+                harakat.Add(m.Index, s[m.Index - nHarakatRemoved]);
+                s = s.Remove(m.Index - nHarakatRemoved, 1);
+                nHarakatRemoved++;
+            }
+
+            return s;
+        }
+
+        private static string SowHarakat(string s, SortedDictionary<int, char> harakat)
+        {
+            foreach (KeyValuePair<int, char> entry in harakat)
+            {
+                System.Diagnostics.Debug.WriteLine(entry);
+                s = s.Insert(entry.Key, entry.Value.ToString());
+            }
+
+            return s;
+        }
+
         public static string Reshape(string initString)
         {
             if (initString.Length <= 0)
@@ -281,8 +317,20 @@ namespace VRCOSC
                 return "";
             }
 
+
+            SortedDictionary<int, char> harakat = new SortedDictionary<int, char>();
+            
             string s = ReshapeLigatures(initString);
+
+            MatchCollection mc = Regex.Matches(s, harakatRegex);
+
+            // Harvest harakats from string 
+            s = HarvestHarakat(s, harakat);
+
             s = ReshapeLetters(s);
+
+            // Sow harakats back into string 
+            s = SowHarakat(s, harakat);
 
             System.Diagnostics.Debug.WriteLine("S", s);
 
@@ -293,5 +341,6 @@ namespace VRCOSC
             System.Diagnostics.Debug.WriteLine("CharArray", charArray);
             return new string(charArray);
         }
+
     }
 }

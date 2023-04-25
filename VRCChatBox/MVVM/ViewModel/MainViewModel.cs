@@ -75,7 +75,7 @@ namespace VRCChatBox.MVVM.ViewModel
 
         public MainViewModel()
         {
-            _dummyTextBlock.FontFamily = new FontFamily("Arial");
+            _dummyTextBlock.FontFamily = new FontFamily(new Uri("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic&display=swap", UriKind.RelativeOrAbsolute), "Noto Sans");
             Messages = new ObservableCollection<ChatItem>();
 
 
@@ -106,20 +106,40 @@ namespace VRCChatBox.MVVM.ViewModel
                     return;
                 }
 
-                SendMessage();
-
-
-                Messages.Add(new ChatItem
+                if (SendMessage())
                 {
-                    Message = Message,
-                    Time = DateTime.Now.ToString("hh:mm tt")
-                });
+                    Messages.Add(new ChatItem
+                    {
+                        Message = Message,
+                        Time = DateTime.Now.ToString("hh:mm tt"),
+                        FailedToSend = false
+                    }); ;
+
+
+
+
+                    // Reset message property
+                    Message = "";
+                } else
+                {
+
+                    Message = "[فشل فى الارسال/FAILED TO SEND]:\n\"" + Message + "\"";
+
+                    Messages.Add(new ChatItem
+                    {
+                        Message = Message,
+                        Time = DateTime.Now.ToString("hh:mm tt"),
+                        FailedToSend = true
+                    });
+
+
+
+                    // Reset message property
+                    Message = "";
+                }
+
 
                 
-
-
-                // Reset message property
-                Message = "";
             });
 
 
@@ -191,9 +211,9 @@ namespace VRCChatBox.MVVM.ViewModel
                 yield return Tuple.Create(builder.ToString(), previousType);
         }
 
-        public void SendMessage()
+        public bool SendMessage()
         {
-            if (Message == string.Empty) { return; }
+            if (Message == string.Empty) { return true; }
 
             // /chatbox/input s b
             foreach (char c in Message)
@@ -218,7 +238,15 @@ namespace VRCChatBox.MVVM.ViewModel
 
                 if (type == CharType.Arabic)
                 {
-                    msg = ArabicReshaper.Reshape(msg);
+                    // If we can't reshape, abort
+                    try {
+                        msg = ArabicReshaper.Reshape(msg);
+                    }
+                    catch (Exception e)
+                    {
+                        return false;
+                    }
+                    
                     processedText.Append(msg);
                 }
                 else
@@ -247,6 +275,8 @@ namespace VRCChatBox.MVVM.ViewModel
             
             var sender = new CoreOSC.UDPSender(_vrcAddress, _vrcPort);
             sender.Send(message);
+
+            return true;
         }
 
 

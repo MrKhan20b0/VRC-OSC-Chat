@@ -12,7 +12,7 @@ namespace VRCChatBox.MVVM.Model
 
         public string Time { get; set; }
 
-
+        public bool FailedToSend { get; set; }
 
     }
 }
